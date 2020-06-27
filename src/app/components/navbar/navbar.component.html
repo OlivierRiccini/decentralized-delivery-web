@@ -1,0 +1,8 @@
+<nav>
+    <h1>Awesome Decentralized Delivery App!</h1>
+    <div class="flex-item">
+        <div class="nav-item flex-item"><span id="green-point"></span> {{ currentNetwork | titlecase }}</div>
+        <div class="nav-item">{{ currentAccount?.address | titlecase }}</div>
+        <div class="nav-item">{{ currentAccount?.balance }} ETH</div>
+    </div>
+</nav>

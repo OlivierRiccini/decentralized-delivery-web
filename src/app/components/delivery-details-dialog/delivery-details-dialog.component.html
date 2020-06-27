@@ -1,0 +1,113 @@
+<div>
+    <h3 mat-dialog-title>{{ deliveryData.hash }}</h3>
+    <div class="timer-box">
+        <div>
+            Should be delivered before: {{ deliveryData.deadline | date:'medium' }}
+        </div>
+        <div *ngIf="deliveryData.state !== deliveryState.ENDED_OVERTIME">
+            Remaining: <span [ngClass]="{ 'red-time': deadlineExceeded }">
+                {{ timer?.days }}d {{ timer?.hours }}h {{ timer?.minutes }}m {{ timer?.seconds }}s
+            </span>
+        </div>
+        <div *ngIf="deliveryData.state === deliveryState.ENDED_OVERTIME">
+            <span class="red-time">Delivery has been canceled because of time issue</span>
+        </div>
+    </div>
+    <mat-horizontal-stepper labelPosition="bottom" #stepper>
+        <ng-template matStepperIcon="edit">
+            <span class="material-icons">
+                done
+            </span>
+        </ng-template>
+        <mat-step *ngFor="let step of steps" [completed]="step.completed">
+            <div class="step-body-container">
+                <div *ngIf="isLoading || isSending" class="loading-container">
+                    <p *ngIf="isSending">Waiting for the blockchain to confirm your demand...it can take a little while</p>
+                    <p *ngIf="isLoading">Loading data from the blockchain...</p>
+                    <mat-spinner></mat-spinner>
+                </div>
+                <ng-template matStepLabel>
+                    <span class="material-icons">
+                        {{ step.id | deliveryStateIcon }}
+                    </span>
+                    {{ step.id | deliveryState | titlecase }}
+                </ng-template>
+                <br>
+                <mat-list role="list">
+                    <mat-list-item role="listitem"><b>Sender: </b> {{ deliveryData.sender }}</mat-list-item>
+                    <mat-list-item role="listitem"><b>Receiver: </b> {{ deliveryData.receiver }}</mat-list-item>
+                    <mat-list-item *ngIf="deliveryData.state !== deliveryState.PENDING" role="listitem">
+                        <b>Courier: </b> {{ deliveryData.courier }}
+                    </mat-list-item>
+                    <mat-list-item role="listitem"><b>Reward: </b> {{ deliveryData.reward }}</mat-list-item>
+                    <mat-list-item role="listitem"><b>Caution amount: </b> {{ deliveryData.cautionAmount }}</mat-list-item>
+                    <mat-list-item role="listitem"><b>From address: </b> {{ deliveryData.fromAddress }}</mat-list-item>
+                    <mat-list-item role="listitem"><b>To address: </b> {{ deliveryData.toAddress }}</mat-list-item>
+                    <mat-list-item 
+                        *ngIf="deliveryData.state === deliveryState.STARTED || deliveryData.state === deliveryState.ENDED ||deliveryData.state === deliveryState.ENDED_OVERTIME"
+                        role="listitem">
+                        <b>Start time: </b> {{ deliveryData.startTime | date:'medium' }}
+                    </mat-list-item>
+                    <mat-list-item *ngIf="deliveryData.state === deliveryState.ENDED ||deliveryData.state === deliveryState.ENDED_OVERTIME" role="listitem">
+                        <b>End time: </b> {{ deliveryData.endTime | date:'medium' }}
+                    </mat-list-item>
+                    <mat-list-item role="listitem"><b>Timestamp: </b> {{ deliveryData.timestamp | date:'medium' }}</mat-list-item>
+                </mat-list>
+            </div>
+
+            <div *ngIf="!isLoading && deliveryData.state === deliveryState.PENDING" mat-dialog-actions>
+                <form
+                    [formGroup]="applicationForm" 
+                    (ngSubmit)="onApplyToDelivery()"
+                    (keydown.enter)="$event.preventDefault()">
+                    <div class="field-flexbox">
+                        <mat-form-field>
+                            <input matInput type="text" placeholder="name" formControlName="name">
+                        </mat-form-field>
+                        <mat-form-field>
+                            <input matInput type="tel" placeholder="phone" formControlName="phone">
+                        </mat-form-field>
+                        <mat-form-field>
+                            <input matInput type="email" placeholder="email" formControlName="email">
+                        </mat-form-field>
+                    </div>
+                    <button mat-raised-button color="primary" [disabled]="applicationForm?.invalid || isSending">Apply</button>
+                </form>
+            </div>
+        
+            <div 
+                *ngIf="!isLoading && deliveryData.state === deliveryState.AWAITING_PICKUP"
+                mat-dialog-actions
+                class="button-box"
+                [matTooltip]="startDeliveryTooltipText"
+                aria-label="Button that displays a tooltip when focused or hovered over">
+                <button [disabled]="startDeliveryDisabled" mat-raised-button color="primary" (click)="onStartDelivery()">
+                    Start Delivery
+                </button>
+            </div>
+
+            <div *ngIf="!isLoading && deliveryData.state === deliveryState.STARTED" class="started-actions-flex">
+                <div 
+                    mat-dialog-actions
+                    class="button-box"
+                    [matTooltip]="signReceipTooltipText"
+                    aria-label="Button that displays a tooltip when focused or hovered over">
+                    <button [disabled]="signReceipDisabled" mat-raised-button color="primary" (click)="onSignReceip()">
+                        Sign Reception
+                    </button>
+                </div>
+    
+                <div 
+                    mat-dialog-actions
+                    class="button-box"
+                    [matTooltip]="cancelDeliveryDisabledText"
+                    aria-label="Button that displays a tooltip when focused or hovered over">
+                    <button [disabled]="cancelDeliveryDisabled" mat-raised-button color="primary" (click)="onCancelDelivery()">
+                        Cancel delivery for time reasons
+                    </button>
+                </div>
+            </div>
+        
+        </mat-step>
+    </mat-horizontal-stepper>
+</div>

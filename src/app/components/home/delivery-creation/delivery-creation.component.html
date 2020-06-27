@@ -1,0 +1,92 @@
+<h2>New Delivery</h2>
+<mat-card>
+    <div class="main-form-container">
+        <div *ngIf="isSending" class="loading-container">
+            <p>Waiting for the blockchain to confirm your demand...it can take a little while</p>
+            <mat-spinner></mat-spinner>
+        </div>
+        <mat-horizontal-stepper labelPosition="bottom" [linear]="true" #stepper>
+            <form 
+            [formGroup]="creationForm" 
+            #formDirective="ngForm"
+            (keydown.enter)="$event.preventDefault()">
+                <mat-step [stepControl]="creationForm.get('senderInfo')" formGroupName="senderInfo">
+                    <ng-template matStepLabel>Sender Info</ng-template>
+                    <mat-form-field>
+                    <mat-label>Sender name</mat-label>
+                    <input matInput type="text" placeholder="Sender name" formControlName="senderName" required>
+                    </mat-form-field>
+                    <mat-form-field>
+                        <mat-label>Sender phone</mat-label>
+                        <input matInput type="tel" placeholder="Sender phone" formControlName="senderPhone" required>
+                    </mat-form-field>
+                    <mat-form-field>
+                        <mat-label>Sender email</mat-label>
+                        <input matInput type="email" placeholder="Sender email" formControlName="senderEmail" required>
+                    </mat-form-field>
+                    <div>
+                    <button mat-button matStepperNext>Next</button>
+                    </div>
+                </mat-step>
+                <mat-step [stepControl]="creationForm.get('receiverInfo')"  formGroupName="receiverInfo">
+                    <ng-template matStepLabel>Receiver Info</ng-template>
+                    <mat-form-field>
+                        <mat-label>Receiver Ethereum address</mat-label>
+                        <input matInput type="text" placeholder="Receiver Ethereum address" formControlName="receiverEthAddress" required>
+                    </mat-form-field>
+                    <mat-form-field>
+                        <mat-label>Receiver name</mat-label>
+                        <input matInput type="text" placeholder="Receiver name" formControlName="receiverName" required>
+                    </mat-form-field>
+                    <mat-form-field>
+                        <mat-label>Receiver phone</mat-label>
+                        <input matInput type="tel" placeholder="Receiver phone" formControlName="receiverPhone" required>
+                    </mat-form-field>
+                    <mat-form-field>
+                        <mat-label>Receiver email</mat-label>
+                        <input matInput type="email" placeholder="Receiver email" formControlName="receiverEmail" required>
+                    </mat-form-field>
+                    <div>
+                    <button mat-button matStepperPrevious>Back</button>
+                    <button mat-button matStepperNext>Next</button>
+                    </div>
+                </mat-step>
+                <mat-step [stepControl]="creationForm.get('deliveryInfo')" formGroupName="deliveryInfo">
+                    <ng-template matStepLabel>Delivery Info</ng-template>
+                    <mat-form-field>
+                        <mat-label>From address</mat-label>
+                        <input matInput type="text" placeholder="From address" formControlName="fromAddress" required>
+                    </mat-form-field>
+                    <mat-form-field>
+                        <mat-label>To address</mat-label>
+                        <input matInput type="text" placeholder="To address" formControlName="toAddress" required>
+                    </mat-form-field>
+                    <mat-form-field>
+                        <mat-label>Reward</mat-label>
+                        <input matInput type="number" placeholder="Reward" formControlName="reward" required>
+                    </mat-form-field>
+                    <mat-form-field>
+                        <mat-label>Caution amount</mat-label>
+                        <input matInput type="number" placeholder="Caution amount" formControlName="cautionAmount" required>
+                    </mat-form-field>
+                    <mat-form-field>
+                        <mat-label>Deadline</mat-label>
+                        <input matInput type="date" placeholder="Deadline" formControlName="deadline" required>
+                    </mat-form-field>
+                    <div>
+                        <button mat-button matStepperPrevious>Back</button>
+                        <button mat-button (click)="stepper.reset()">Reset</button>
+                        <button 
+                            mat-raised-button
+                            color="primary"
+                            class="create-btn"
+                            [disabled]="creationForm.invalid && creationForm.get('senderInfo').value.senderName !== 'mock'"
+                            (click)="onSubmit(formDirective)">
+                            Create
+                        </button>
+                    </div>
+                </mat-step>
+            </form>
+        </mat-horizontal-stepper>
+    </div>
+</mat-card>
