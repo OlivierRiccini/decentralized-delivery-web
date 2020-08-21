@@ -1,0 +1,11 @@
+@import 'src/sass/variables';
+
+footer {
+    height: $footerHeight;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    p {
+        margin: 0px;
+    }
+}

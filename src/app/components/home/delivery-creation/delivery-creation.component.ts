@@ -17,6 +17,7 @@ export class DeliveryCreationComponent implements OnInit {
   public creationForm: FormGroup;
   public submitted = false;
   public isSending = false;
+  public selectedIndex: number;
   private subscription = new Subscription();
 
   constructor(
@@ -130,6 +131,10 @@ export class DeliveryCreationComponent implements OnInit {
         senderName:  delivery.senderInfo.senderName,
         senderPhone:  delivery.senderInfo.senderPhone
     };
+  }
+
+  public selectionChange(e) {
+    this.selectedIndex = e.selectedIndex;
   }
 
   private listenToAccountChanges(): void {

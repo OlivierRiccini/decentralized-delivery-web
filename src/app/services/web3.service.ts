@@ -35,7 +35,18 @@ export class Web3Service {
     this.isWeb3Ready = new BehaviorSubject(false);
     this.isWeb3Ready$ = this.isWeb3Ready.asObservable();
     this.contractAddress = '0x278Bb1675c63A1922429EfE86a59773e0532454D';
-    this.initWeb3();
+    this.initWeb3().then(async () => {
+      try {
+        await this.updateAccounts();
+        await this.listenToAccountsChanged();
+        await this.getCurrentNetwork();
+        this.initContractInstance();
+        this.initEventSubscriptions();
+        this.isWeb3Ready.next(true);
+      } catch (err) {
+        alert('ERROR ' + err);
+      }
+    }).catch();
   }
 
   public async loadDeliveries(): Promise<any> {
@@ -131,33 +142,72 @@ export class Web3Service {
     return decodedUser;
   }
 
-  private initWeb3() {
-    // Checking if Web3 has been injected by the browser (Mist/MetaMask)
-    if (typeof window.ethereum !== 'undefined') {
-      // Use Mist/MetaMask's provider
-      window.ethereum.enable().then(async () => {
-        this.web3 = new Web3(window.ethereum);
+  // private initWeb3() {
+  //   // Checking if Web3 has been injected by the browser (Mist/MetaMask)
+  //   if (typeof window.ethereum !== 'undefined') {
+  //     // Use Mist/MetaMask's provider
+  //     window.ethereum.enable().then(async () => {
+  //       this.web3 = new Web3(window.ethereum);
+  //       // const accounts = await this.web3.eth.getAccounts();
+  //       await this.updateAccounts();
+  //       await this.listenToAccountsChanged();
+  //       await this.getCurrentNetwork();
+  //       this.initContractInstance();
+  //       this.initEventSubscriptions();
+  //       this.isWeb3Ready.next(true);
+  //     });
+  //   }  else {
+  //     alert('No web3? You should consider trying MetaMask!');
+  //     // Hack to provide backwards compatibility for Truffle, which uses web3js 0.20.x
+  //     Web3.providers.HttpProvider.prototype.sendAsync = Web3.providers.HttpProvider.prototype.send;
+  //     // fallback - use your fallback strategy (local node / hosted node + in-dapp id mgmt / fail)
+  //     this.web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'));
+  //   }
+
+  //   if (window.ethereum.isStatus) {
+  //     // we are running in Status
+  //     this.network.next('Inho le boss');
+  //   }
+
+  // }
+
+  private async initWeb3() {
+    if (window.ethereum) {
+      window.web3 = new Web3(window.ethereum);
+      this.web3 = new Web3(window.ethereum);
+      try {
+        // Request account access if needed
+        await window.ethereum.enable();
+        // this.web3 = new Web3(window.ethereum);
         // const accounts = await this.web3.eth.getAccounts();
-        await this.updateAccounts();
-        await this.listenToAccountsChanged();
-        await this.getCurrentNetwork();
-        this.initContractInstance();
-        this.initEventSubscriptions();
-        this.isWeb3Ready.next(true);
-      });
+        // await this.updateAccounts();
+        // await this.listenToAccountsChanged();
+        // await this.getCurrentNetwork();
+        // this.initContractInstance();
+        // this.initEventSubscriptions();
+        // this.isWeb3Ready.next(true);
+      } catch (error) {
+        // User denied account access…
+        alert('User denied account access…');
+      }
+    } else if (window.web3) {
+      // Legacy dapp browsers…
+      alert('Legacy...');
+      window.web3 = new Web3(this.web3.currentProvider);
     } else {
-      alert('No web3? You should consider trying MetaMask!');
-      // Hack to provide backwards compatibility for Truffle, which uses web3js 0.20.x
-      Web3.providers.HttpProvider.prototype.sendAsync = Web3.providers.HttpProvider.prototype.send;
-      // fallback - use your fallback strategy (local node / hosted node + in-dapp id mgmt / fail)
-      this.web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'));
+      // Non-dapp browsers…
+      alert(
+        'Non-Ethereum browser detected. You should consider trying Status!'
+      );
     }
   }
 
   private async listenToAccountsChanged(): Promise<void> {
-    window.ethereum.on('accountsChanged', async () => {
-      await this.updateAccounts();
-    });
+    if (window.ethereum.on) {
+      window.ethereum.on('accountsChanged', async () => {
+        await this.updateAccounts();
+      });
+    }
   }
 
   private async updateAccounts(): Promise<void> {

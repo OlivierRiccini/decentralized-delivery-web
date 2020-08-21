@@ -1,5 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
 @import 'src/sass/variables';
+@import "https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v4.0.2/mapbox-gl-directions.css";
 
 html, body { height: 100%; }
 body { 
@@ -7,15 +8,11 @@ body {
     font-family: Roboto,
     "Helvetica Neue", sans-serif;
     background: $extraLightOpacityBlue;
-    overflow: hidden;
+    // overflow: hidden;
 }
 
 .mat-grid-tile .mat-figure {
     align-items: initial !important;
-}
-
-#main-container {
-    height: calc(100vh - #{$navbarHeight});
 }
 
 .main-form-container {
@@ -87,3 +84,11 @@ mat-dialog-container {
     background-color: $green;
 }
 
+.mat-menu-item:nth-child(1){
+    display: flex !important;;
+    align-items: center !important;
+}
+
+.mat-menu-panel {
+    max-width: 100vw !important;
+}

@@ -17,10 +17,12 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatListModule } from '@angular/material/list';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatMenuModule } from '@angular/material/menu';
+import { MapComponent } from './map/map.component';
 
 
 @NgModule({
-  declarations: [],
+  declarations: [MapComponent],
   imports: [
     CommonModule,
     FormsModule,
@@ -40,7 +42,8 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     MatStepperModule,
     MatTabsModule,
     MatListModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatMenuModule
   ],
   exports: [
     FormsModule,
@@ -60,7 +63,9 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     MatStepperModule,
     MatTabsModule,
     MatListModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatMenuModule,
+    MapComponent
   ],
   providers: [
     FormGroupDirective

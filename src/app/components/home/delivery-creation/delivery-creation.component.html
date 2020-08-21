@@ -5,7 +5,7 @@
             <p>Waiting for the blockchain to confirm your demand...it can take a little while</p>
             <mat-spinner></mat-spinner>
         </div>
-        <mat-horizontal-stepper labelPosition="bottom" [linear]="true" #stepper>
+        <mat-horizontal-stepper labelPosition="bottom" [linear]="true" #stepper (selectionChange)="selectionChange($event)">
             <form 
             [formGroup]="creationForm" 
             #formDirective="ngForm"
@@ -53,14 +53,15 @@
                 </mat-step>
                 <mat-step [stepControl]="creationForm.get('deliveryInfo')" formGroupName="deliveryInfo">
                     <ng-template matStepLabel>Delivery Info</ng-template>
-                    <mat-form-field>
+                    <app-map *ngIf="selectedIndex === 2"></app-map>
+                    <!-- <mat-form-field>
                         <mat-label>From address</mat-label>
                         <input matInput type="text" placeholder="From address" formControlName="fromAddress" required>
                     </mat-form-field>
                     <mat-form-field>
                         <mat-label>To address</mat-label>
                         <input matInput type="text" placeholder="To address" formControlName="toAddress" required>
-                    </mat-form-field>
+                    </mat-form-field> -->
                     <mat-form-field>
                         <mat-label>Reward</mat-label>
                         <input matInput type="number" placeholder="Reward" formControlName="reward" required>

@@ -11,7 +11,8 @@
 
 @media screen and (max-width: $smallDeviceBreakpoint) {
     #flex-container {
-        flex-direction: column
+        flex-direction: column;
+        // display: block;
     };
     .flex-container-item {
         width: 100%;

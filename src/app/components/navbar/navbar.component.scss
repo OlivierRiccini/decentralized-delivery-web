@@ -9,6 +9,7 @@ nav {
     padding: 0 16px;
     height: $navbarHeight;
     background-color: $blue;
+    // width: 100vw;
     box-shadow: 0 3px 5px -1px rgba(0,0,0,.2), 0 6px 10px 0 rgba(0,0,0,.14), 0 1px 18px 0 rgba(0,0,0,.12);
     color: #fff;
     .nav-item {
@@ -34,4 +35,17 @@ nav {
 h1 {
     margin: 0;
     font-size: 18px;
+}
+
+.mobile-menu {
+    display: none;
+  }
+
+@media screen and (max-width: $smallDeviceBreakpoint) {
+    .mobile-menu {
+      display: block;
+    }
+    .flex-item {
+        display: none;
+    }
 }

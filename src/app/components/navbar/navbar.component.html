@@ -1,8 +1,18 @@
 <nav>
-    <h1>Awesome Decentralized Delivery App!</h1>
+    <h1>Decentralized Delivery App!</h1>
     <div class="flex-item">
         <div class="nav-item flex-item"><span id="green-point"></span> {{ currentNetwork | titlecase }}</div>
         <div class="nav-item">{{ currentAccount?.address | titlecase }}</div>
         <div class="nav-item">{{ currentAccount?.balance }} ETH</div>
+    </div>
+    <div class="mobile-menu">
+        <button mat-button [matMenuTriggerFor]="menu"><span class="material-icons">
+            help_outline
+            </span></button>
+        <mat-menu #menu="matMenu">
+            <span mat-menu-item><span id="green-point"></span> {{ currentNetwork | titlecase }}</span>
+            <span mat-menu-item>{{ currentAccount?.address | titlecase }}</span>
+            <span mat-menu-item>{{ currentAccount?.balance }} ETH</span>
+        </mat-menu>
     </div>
 </nav>
