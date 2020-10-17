@@ -5,6 +5,10 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { DeliveryState } from 'src/app/models/deliveryState';
 import { MatStepper } from '@angular/material/stepper';
 import { NotificationService } from 'src/app/services/notification.service';
+import { Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { map, first } from 'rxjs/operators';
+import { DeliveryService } from 'src/app/services/delivery.service';
 
 @Component({
   selector: 'app-delivery-details-dialog',
@@ -25,6 +29,9 @@ export class DeliveryDetailsDialogComponent implements AfterViewInit {
   public cancelDeliveryDisabledText: string;
   public timer = { days: null, hours: null, minutes: null, seconds: null };
   public deadlineExceeded = false;
+  public estimatedDuration$: Observable<number>;
+  public fromAddress$: Observable<string>;
+
   public steps = [];
   private user: any;
   @ViewChild('stepper') stepper: MatStepper;
@@ -34,7 +41,8 @@ export class DeliveryDetailsDialogComponent implements AfterViewInit {
     public dialogRef: MatDialogRef<DeliveryDetailsDialogComponent>,
     private formBuilder: FormBuilder,
     private web3Service: Web3Service,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private deliveryService: DeliveryService
     ) {
     this.getUser();
     this.initSteps();
@@ -49,6 +57,8 @@ export class DeliveryDetailsDialogComponent implements AfterViewInit {
           step.completed = true;
         }
       });
+      this.estimatedDuration$ = this.deliveryService.addressesToDuration(this.deliveryData);
+      this.fromAddress$ = this.deliveryService.formatFromAddress(this.deliveryData);
       this.isLoading = false;
     }, 1000);
   }

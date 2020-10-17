@@ -41,10 +41,11 @@
                     </mat-list-item>
                     <mat-list-item role="listitem"><b>Reward: </b> {{ deliveryData.reward }}</mat-list-item>
                     <mat-list-item role="listitem"><b>Caution amount: </b> {{ deliveryData.cautionAmount }}</mat-list-item>
-                    <mat-list-item role="listitem"><b>From address: </b> {{ deliveryData.fromAddress }}</mat-list-item>
-                    <mat-list-item role="listitem"><b>To address: </b> {{ deliveryData.toAddress }}</mat-list-item>
+                    <mat-list-item role="listitem"><b>From address: </b> {{ fromAddress$ | async }}</mat-list-item>
+                    <mat-list-item *ngIf="deliveryData.state !== deliveryState.PENDING" role="listitem"><b>To address: </b> {{ deliveryData.toAddress }}</mat-list-item>
+                    <mat-list-item *ngIf="deliveryData.state === deliveryState.PENDING && estimatedDuration$" role="listitem"><b>Estimated duration to shipping address: </b> {{ estimatedDuration$ | async | date:'mm:ss' }}</mat-list-item>
                     <mat-list-item 
-                        *ngIf="deliveryData.state === deliveryState.STARTED || deliveryData.state === deliveryState.ENDED ||deliveryData.state === deliveryState.ENDED_OVERTIME"
+                        *ngIf="deliveryData.state === deliveryState.STARTED || deliveryData.state === deliveryState.ENDED || deliveryData.state === deliveryState.ENDED_OVERTIME"
                         role="listitem">
                         <b>Start time: </b> {{ deliveryData.startTime | date:'medium' }}
                     </mat-list-item>

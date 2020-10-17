@@ -53,7 +53,9 @@
                 </mat-step>
                 <mat-step [stepControl]="creationForm.get('deliveryInfo')" formGroupName="deliveryInfo">
                     <ng-template matStepLabel>Delivery Info</ng-template>
-                    <app-map *ngIf="selectedIndex === 2"></app-map>
+                    <div class="map-container">
+                        <app-map *ngIf="selectedIndex === 2" [remoteFormGroup]="creationForm.get('deliveryInfo')"></app-map>
+                    </div>
                     <!-- <mat-form-field>
                         <mat-label>From address</mat-label>
                         <input matInput type="text" placeholder="From address" formControlName="fromAddress" required>

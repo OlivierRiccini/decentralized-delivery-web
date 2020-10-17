@@ -1,5 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
 @import 'src/sass/variables';
+@import 'https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css';
 @import "https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v4.0.2/mapbox-gl-directions.css";
 
 html, body { height: 100%; }
@@ -10,7 +11,7 @@ body {
     background: $extraLightOpacityBlue;
     // overflow: hidden;
 }
-
+    
 .mat-grid-tile .mat-figure {
     align-items: initial !important;
 }

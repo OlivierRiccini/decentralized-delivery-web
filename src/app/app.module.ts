@@ -14,6 +14,7 @@ import { DeliveryDetailsDialogComponent } from './components/delivery-details-di
 import { DeliveryState } from './pipes/deliveryState.pipe';
 import { DeliveryStateIcon } from './pipes/deliveryStateIcon.pipe';
 import { FooterComponent } from './components/footer/footer.component';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { FooterComponent } from './components/footer/footer.component';
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
-    SharedModule
+    SharedModule,
+    HttpClientModule
   ],
   providers: [Web3Service],
   bootstrap: [AppComponent]

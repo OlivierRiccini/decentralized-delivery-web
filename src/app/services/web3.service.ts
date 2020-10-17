@@ -3,6 +3,9 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import Web3 from 'web3';
 import { IAccount } from '../models/account';
 import * as moment from 'moment';
+import { IGeoJson } from '../models/geoJson';
+import { first } from 'rxjs/operators';
+import { features } from 'process';
 
 declare let require: any;
 const DELIVERY_MANAGER_ARTIFACTS = require('../../config/contracts/DeliveryManager.json');
@@ -22,6 +25,8 @@ export class Web3Service {
   private isWeb3Ready: BehaviorSubject<boolean>;
   public isWeb3Ready$: Observable<boolean>;
   private contractAddress: string;
+  private deliveryFeatures: BehaviorSubject<IGeoJson[]>;
+  public deliveryFeatures$: Observable<IGeoJson[]>;
 
   private deliveryManagerContract: any;
 
@@ -34,6 +39,8 @@ export class Web3Service {
     this.network$ = this.network.asObservable();
     this.isWeb3Ready = new BehaviorSubject(false);
     this.isWeb3Ready$ = this.isWeb3Ready.asObservable();
+    this.deliveryFeatures = new BehaviorSubject([]);
+    this.deliveryFeatures$ = this.deliveryFeatures.asObservable();
     this.contractAddress = '0x278Bb1675c63A1922429EfE86a59773e0532454D';
     this.initWeb3().then(async () => {
       try {
@@ -59,6 +66,8 @@ export class Web3Service {
         const decodedDelivery = this.decodeDelivery(delivery, deliveryHash);
         deliveries.push(decodedDelivery);
       }
+      const deliveryFeatures = deliveries.map(delivery => this.deliveryToFeature(delivery)).filter(item => item);
+      this.deliveryFeatures.next(deliveryFeatures);
       return deliveries;
     } catch (err) {
       console.log('MEGA ERROR ', err);
@@ -142,35 +151,6 @@ export class Web3Service {
     return decodedUser;
   }
 
-  // private initWeb3() {
-  //   // Checking if Web3 has been injected by the browser (Mist/MetaMask)
-  //   if (typeof window.ethereum !== 'undefined') {
-  //     // Use Mist/MetaMask's provider
-  //     window.ethereum.enable().then(async () => {
-  //       this.web3 = new Web3(window.ethereum);
-  //       // const accounts = await this.web3.eth.getAccounts();
-  //       await this.updateAccounts();
-  //       await this.listenToAccountsChanged();
-  //       await this.getCurrentNetwork();
-  //       this.initContractInstance();
-  //       this.initEventSubscriptions();
-  //       this.isWeb3Ready.next(true);
-  //     });
-  //   }  else {
-  //     alert('No web3? You should consider trying MetaMask!');
-  //     // Hack to provide backwards compatibility for Truffle, which uses web3js 0.20.x
-  //     Web3.providers.HttpProvider.prototype.sendAsync = Web3.providers.HttpProvider.prototype.send;
-  //     // fallback - use your fallback strategy (local node / hosted node + in-dapp id mgmt / fail)
-  //     this.web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'));
-  //   }
-
-  //   if (window.ethereum.isStatus) {
-  //     // we are running in Status
-  //     this.network.next('Inho le boss');
-  //   }
-
-  // }
-
   private async initWeb3() {
     if (window.ethereum) {
       window.web3 = new Web3(window.ethereum);
@@ -178,14 +158,6 @@ export class Web3Service {
       try {
         // Request account access if needed
         await window.ethereum.enable();
-        // this.web3 = new Web3(window.ethereum);
-        // const accounts = await this.web3.eth.getAccounts();
-        // await this.updateAccounts();
-        // await this.listenToAccountsChanged();
-        // await this.getCurrentNetwork();
-        // this.initContractInstance();
-        // this.initEventSubscriptions();
-        // this.isWeb3Ready.next(true);
       } catch (error) {
         // User denied account access…
         alert('User denied account access…');
@@ -232,6 +204,7 @@ export class Web3Service {
       if (event.returnValues._deliveryHash) {
         const deliveryHash = event.returnValues._deliveryHash;
         const delivery = await this.getDelivery(deliveryHash);
+        this.addItemToMap(delivery);
         this.deliveryStream.next(delivery);
       }
     });
@@ -280,5 +253,43 @@ export class Web3Service {
       deadline: moment(new Date(delivery.deadline)).unix()
     };
   }
+
+  private addItemToMap(delivery: any): void {
+    const feature = this.deliveryToFeature(delivery);
+    this.deliveryFeatures$.pipe(
+      first(),
+    ).subscribe(currentFeatures => {
+      currentFeatures.push(feature);
+      this.deliveryFeatures.next(currentFeatures);
+    });
+  }
+
+  private deliveryToFeature(delivery: any): IGeoJson {
+    const coordinates = this.formatStrToCoordinates(delivery.fromAddress);
+    if (!coordinates) {
+      return undefined;
+    }
+    return {
+      // feature for Mapbox DC
+      'type': 'Feature',
+      'geometry': {
+        'type': 'Point',
+        'coordinates': coordinates
+      },
+      'properties': { }
+    };
+  }
+
+  private formatStrToCoordinates(str: string): number[] {
+    const isCoordinates = str.split(',').length === 2;
+    if (!isCoordinates) {
+      return undefined;
+    }
+    return str.split(',').map((e: string) => Number(e));
+  }
+
+  // private isCoordinates(str: string): boolean {
+  //   return str.split(',').length === 2;
+  // }
 
 }
