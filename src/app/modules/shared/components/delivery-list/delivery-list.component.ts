@@ -5,7 +5,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { Web3Service } from 'src/app/services/web3.service';
 import * as _ from 'lodash';
 import { MatDialog } from '@angular/material/dialog';
-import { DeliveryDetailsDialogComponent } from '../../delivery-details-dialog/delivery-details-dialog.component';
+import { DeliveryDetailsDialogComponent } from '../delivery-details-dialog/delivery-details-dialog.component';
 
 @Component({
   selector: 'app-delivery-list',

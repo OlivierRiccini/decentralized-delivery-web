@@ -18,11 +18,20 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatListModule } from '@angular/material/list';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatMenuModule } from '@angular/material/menu';
-import { MapComponent } from './map/map.component';
-
+import { MapComponent } from './components/map/map.component';
+import { DeliveryListComponent } from './components/delivery-list/delivery-list.component';
+import { DeliveryDetailsDialogComponent } from './components/delivery-details-dialog/delivery-details-dialog.component';
+import { DeliveryStateIcon } from 'src/app/pipes/deliveryStateIcon.pipe';
+import { DeliveryState } from 'src/app/pipes/deliveryState.pipe';
 
 @NgModule({
-  declarations: [MapComponent],
+  declarations: [
+    MapComponent,
+    DeliveryListComponent,
+    DeliveryDetailsDialogComponent,
+    DeliveryStateIcon,
+    DeliveryState
+  ],
   imports: [
     CommonModule,
     FormsModule,
@@ -65,7 +74,11 @@ import { MapComponent } from './map/map.component';
     MatListModule,
     MatSnackBarModule,
     MatMenuModule,
-    MapComponent
+    MapComponent,
+    DeliveryListComponent,
+    DeliveryDetailsDialogComponent,
+    DeliveryStateIcon,
+    DeliveryState
   ],
   providers: [
     FormGroupDirective
