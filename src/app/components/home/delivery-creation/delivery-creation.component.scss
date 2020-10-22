@@ -1,0 +1,25 @@
+@import 'src/sass/variables';
+
+h2 {
+    text-align: center;
+}
+
+mat-card {
+    margin-bottom: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    padding: 0px !important;
+}
+
+mat-form-field {
+    padding: 10px;
+}
+
+.map-container {
+    position: relative;
+    height: 250px;
+}
+
+.create-btn {
+    float: right;
+}

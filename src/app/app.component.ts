@@ -14,7 +14,7 @@ export class AppComponent {
 
   constructor(private web3Service: Web3Service) {
     // this.listenToIsWeb3Ready();
-    this.isWeb3Ready$ = this.web3Service.isWeb3Ready$;
+    this.isWeb3Ready$ = this.web3Service.isWeb3Initialized$;
   }
 
   // private listenToIsWeb3Ready(): void {

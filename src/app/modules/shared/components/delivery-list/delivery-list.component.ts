@@ -15,6 +15,7 @@ import { DeliveryDetailsDialogComponent } from '../delivery-details-dialog/deliv
 export class DeliveryListComponent {
   public displayedColumns: string[] = ['timestamp', 'state', 'reward', 'cautionAmount', 'detailsBtn'];
   private deliveries: any[] = [];
+  // public isWeb3Initialized = false;
   public areDataLoaded = false;
   public dataSource: MatTableDataSource<any>;
 
