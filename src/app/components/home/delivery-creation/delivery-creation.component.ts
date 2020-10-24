@@ -27,7 +27,7 @@ export class DeliveryCreationComponent implements OnInit {
     private notificationService: NotificationService,
     protected formDirective: FormGroupDirective
     ) {
-    this.web3Service.isWeb3Ready$.subscribe(isReady => {
+    this.web3Service.isWeb3Initialized$.subscribe(isReady => {
       if (isReady) {
         this.listenToAccountChanges();
       }

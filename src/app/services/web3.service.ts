@@ -22,8 +22,8 @@ export class Web3Service {
   public network$: Observable<string>;
   private deliveryStream: BehaviorSubject<any>;
   public deliveryStream$: Observable<any>;
-  private isWeb3Ready: BehaviorSubject<boolean>;
-  public isWeb3Ready$: Observable<boolean>;
+  private isWeb3Initialized: BehaviorSubject<boolean>;
+  public isWeb3Initialized$: Observable<boolean>;
   private contractAddress: string;
   private deliveryFeatures: BehaviorSubject<IGeoJson[]>;
   public deliveryFeatures$: Observable<IGeoJson[]>;
@@ -37,23 +37,15 @@ export class Web3Service {
     this.deliveryStream$ = this.deliveryStream.asObservable();
     this.network = new BehaviorSubject(null);
     this.network$ = this.network.asObservable();
-    this.isWeb3Ready = new BehaviorSubject(false);
-    this.isWeb3Ready$ = this.isWeb3Ready.asObservable();
+    this.isWeb3Initialized = new BehaviorSubject(false);
+    this.isWeb3Initialized$ = this.isWeb3Initialized.asObservable();
     this.deliveryFeatures = new BehaviorSubject([]);
     this.deliveryFeatures$ = this.deliveryFeatures.asObservable();
     this.contractAddress = '0x278Bb1675c63A1922429EfE86a59773e0532454D';
-    this.initWeb3().then(async () => {
-      try {
-        await this.updateAccounts();
-        await this.listenToAccountsChanged();
-        await this.getCurrentNetwork();
-        this.initContractInstance();
-        this.initEventSubscriptions();
-        this.isWeb3Ready.next(true);
-      } catch (err) {
-        alert('ERROR ' + err);
-      }
-    }).catch();
+    console.log('Hmmmmm ', window.ethereum._state.isUnlocked);
+    if (window.ethereum._state.isUnlocked) {
+      this.linkWallet().then(() => console.log('Web3 was already unlocked!')).catch();
+    }
   }
 
   public async loadDeliveries(): Promise<any> {
@@ -151,6 +143,20 @@ export class Web3Service {
     return decodedUser;
   }
 
+  public async linkWallet(): Promise<void> {
+    try {
+      await this.initWeb3();
+      await this.updateAccounts();
+      await this.listenToAccountsChanged();
+      await this.getCurrentNetwork();
+      this.initContractInstance();
+      this.initEventSubscriptions();
+      this.isWeb3Initialized.next(true);
+    } catch (err) {
+      alert('ERROR ' + err);
+    }
+  }
+
   private async initWeb3() {
     if (window.ethereum) {
       window.web3 = new Web3(window.ethereum);
@@ -177,7 +183,11 @@ export class Web3Service {
   private async listenToAccountsChanged(): Promise<void> {
     if (window.ethereum.on) {
       window.ethereum.on('accountsChanged', async () => {
-        await this.updateAccounts();
+        if (window.ethereum._state.isUnlocked) {
+          await this.updateAccounts();
+        } else {
+          this.resetWeb3();
+        }
       });
     }
   }
@@ -291,5 +301,11 @@ export class Web3Service {
   // private isCoordinates(str: string): boolean {
   //   return str.split(',').length === 2;
   // }
+
+  private resetWeb3(): void {
+    this.isWeb3Initialized.next(false);
+    this.account.next(null);
+    this.network.next(null);
+  }
 
 }
