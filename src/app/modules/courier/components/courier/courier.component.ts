@@ -30,7 +30,6 @@ export class CourierComponent implements OnInit, OnDestroy {
 
   private listenToWeb3Initialized(): void {
     const subscription = this.web3Service.isWeb3Initialized$.pipe(
-        skip(1)
       ).subscribe(
       isWeb3Initialized => {
         this.isWeb3Initialized = isWeb3Initialized;

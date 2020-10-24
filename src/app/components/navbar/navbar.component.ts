@@ -28,7 +28,7 @@ export class NavbarComponent implements OnDestroy {
   }
 
   private listenToIsWeb3Ready(): void {
-    this.web3Service.isWeb3Initialized$.pipe(skip(1)).subscribe(isReady => {
+    this.web3Service.isWeb3Initialized$.subscribe(isReady => {
       if (isReady) {
         this.isWeb3Ready = isReady;
         this.listenToAccountChanges();
