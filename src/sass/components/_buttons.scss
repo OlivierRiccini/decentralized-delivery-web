@@ -9,3 +9,14 @@
         color: #fff;
     }
 }
+
+.btn-white {
+    font-weight: initial;
+    color: $blue;
+    background: #fff;
+    transition: all .2s;
+    &:hover {
+        background: $blue;
+        color: #fff;
+    }
+}

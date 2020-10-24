@@ -14,12 +14,34 @@ nav {
     color: #fff;
     a {
         color: white;
+        text-decoration: none;
     }
     .nav-item {
-        margin-left: 15px;
+        margin-left: 35px;
     }
 }
 
+.menu-openner {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    &:hover {
+        cursor: pointer;
+    }
+}
+
+.menu-openner-mouseover {
+    cursor: pointer;
+    &:hover {
+        cursor: pointer;
+    } 
+}
+
+/* .network-info {
+    display: flex;
+    background-color: $blue;
+}
+ */
 .flex-item {
     display: flex;
     align-items: center;
@@ -42,7 +64,7 @@ h1 {
 
 .mobile-menu {
     display: none;
-  }
+}
 
 @media screen and (max-width: $smallDeviceBreakpoint) {
     .mobile-menu {

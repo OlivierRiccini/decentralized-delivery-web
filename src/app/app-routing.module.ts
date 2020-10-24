@@ -6,7 +6,8 @@ import { LinkWalletDialogComponent } from './modules/shared/components/link-wall
 const routes: Routes = [
   { path: '', component: HomeComponent, pathMatch: 'full' },
   { path: 'client', loadChildren: () => import('./modules/client/client.module').then(m => m.ClientModule) },
-  { path: 'courier', loadChildren: () => import('./modules/courier/courier.module').then(m => m.CourierModule) }
+  { path: 'courier', loadChildren: () => import('./modules/courier/courier.module').then(m => m.CourierModule) },
+  { path: 'guides', loadChildren: () => import('./modules/guides/guides.module').then(m => m.GuidesModule) }
 ];
 
 @NgModule({

@@ -1,8 +1,11 @@
 <div id="flex-container">
     <div class="flex-container-item">
-        <app-delivery-list *ngIf="isWeb3Initialized$ | async"></app-delivery-list>
-        <div *ngIf="!(isWeb3Initialized$ | async)">LINK WALLET PLEASE!</div>
-        <button (click)="onLinkWallet()">LINK</button>
+        <span *ngIf="isCheckingConnexion">Checking connexion...</span>
+        <app-delivery-list *ngIf="!isCheckingConnexion && isWeb3Initialized"></app-delivery-list>
+        <div *ngIf="!isCheckingConnexion && !isWeb3Initialized">
+            LINK WALLET PLEASE!
+            <button mat-button class="btn-white" (click)="onLinkWallet()">LINK</button>
+        </div>
     </div>
     <div class="flex-container-item">
         <app-map></app-map>

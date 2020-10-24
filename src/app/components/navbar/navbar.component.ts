@@ -2,6 +2,7 @@ import { Component, NgZone, OnDestroy } from '@angular/core';
 import { Web3Service } from '../../services/web3.service';
 import { Subscription } from 'rxjs';
 import { IAccount } from '../../models/account';
+import { last, skip, take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-navbar',
@@ -14,6 +15,7 @@ export class NavbarComponent implements OnDestroy {
   public currentNetwork: string;
   public currentbalance: string;
   public deliveryCount: number;
+  public checkingConnexion = true;
   private subscription = new Subscription();
 
 
@@ -21,13 +23,18 @@ export class NavbarComponent implements OnDestroy {
     this.listenToIsWeb3Ready();
   }
 
+  public onLinkWallet(): void {
+    this.web3Service.openLinkWalletDialog();
+  }
+
   private listenToIsWeb3Ready(): void {
-    this.web3Service.isWeb3Initialized$.subscribe(isReady => {
+    this.web3Service.isWeb3Initialized$.pipe(skip(1)).subscribe(isReady => {
       if (isReady) {
         this.isWeb3Ready = isReady;
         this.listenToAccountChanges();
         this.listenToNetworkChanges();
       }
+      this.checkingConnexion = false;
     });
   }
 

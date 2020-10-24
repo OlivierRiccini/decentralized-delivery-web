@@ -43,7 +43,6 @@ export class Web3Service {
     this.deliveryFeatures = new BehaviorSubject([]);
     this.deliveryFeatures$ = this.deliveryFeatures.asObservable();
     this.contractAddress = '0x278Bb1675c63A1922429EfE86a59773e0532454D';
-    console.log('Hmmmmm ', window.ethereum.isMetaMask);
     if (window.ethereum._state.isUnlocked) {
       this.linkWallet().then(() => console.log('Web3 was already unlocked!')).catch();
     }

@@ -2,18 +2,59 @@
     <a routerLink="./">
         <h1>Decentralized Delivery App! :)</h1>
     </a>
-    <a routerLink="./client">Find a courier</a>
-    <a routerLink="./courier">Earn money</a>
     <div class="flex-item">
-        <div class="nav-item flex-item"><span id="green-point"></span> {{ currentNetwork | titlecase }}</div>
-        <div class="nav-item">{{ currentAccount?.address | titlecase }}</div>
-        <div class="nav-item">{{ currentAccount?.balance }} ETH</div>
+        <div class="nav-item"><a routerLink="./client">Find a courier</a></div>
+        <div class="nav-item"><a routerLink="./courier">Earn money</a></div>
+
+        <div class="nav-item menu-openner" [matMenuTriggerFor]="menuGuides">
+            Guides 
+            <span class="material-icons">
+                arrow_drop_down
+            </span>
+        </div>
+        <mat-menu #menuGuides="matMenu" xPosition="before">
+            <a mat-menu-item routerLink="./guides/faq">White Paper</a>
+            <a mat-menu-item routerLink="./guides/faq">Get Started</a>
+            <a mat-menu-item routerLink="./guides/faq">FAQs</a>
+        </mat-menu>
+
+      <!--   <ng-container *ngIf="isWeb3Ready">
+            <div class="nav-item menu-openner" [matMenuTriggerFor]="menuWallet">
+                <span id="green-point"></span> Connected
+                <span class="material-icons">
+                    arrow_drop_down
+                </span>
+            </div>
+            <mat-menu #menuWallet="matMenu" xPosition="before">
+                <span mat-menu-item><b>Network: </b> &nbsp;{{ currentNetwork | titlecase }}</span>
+                <span mat-menu-item><b>Address: </b> &nbsp;{{ currentAccount?.address | titlecase }}</span>
+                <span mat-menu-item><b>Balance: </b> &nbsp;{{ currentAccount?.balance }} ETH</span>
+            </mat-menu>
+        </ng-container>
+ -->
+     <!--    <div *ngIf="isWeb3Ready" class="nav-item network-info">
+            <div class="flex-item"><span id="green-point"></span> {{ currentNetwork | titlecase }}</div>
+            <div>{{ currentAccount?.address | titlecase }}</div>
+            <div>{{ currentAccount?.balance }} ETH</div>
+        </div> -->
+        <span *ngIf="checkingConnexion" class="nav-item">Checking connexion...</span>
+        <div *ngIf="!checkingConnexion && isWeb3Ready" class="nav-item flex-item">
+            <span id="green-point"></span>Connected to {{ currentNetwork | titlecase }} Network!
+        </div>
+        <button *ngIf="!checkingConnexion && !isWeb3Ready" mat-button class="nav-item btn-white" (click)="onLinkWallet()">
+            Signin With Wallet
+        </button>
+      <!--   <ng-container *ngIf="isWeb3Ready">
+            <div class="nav-item flex-item"><span id="green-point"></span> {{ currentNetwork | titlecase }}</div>
+            <div class="nav-item">{{ currentAccount?.address | titlecase }}</div>
+            <div class="nav-item">{{ currentAccount?.balance }} ETH</div>
+        </ng-container> -->
     </div>
     <div class="mobile-menu">
-        <button mat-button [matMenuTriggerFor]="menu"><span class="material-icons">
+        <button mat-button [matMenuTriggerFor]="mobileMenu"><span class="material-icons">
             help_outline
-            </span></button>
-        <mat-menu #menu="matMenu">
+        </span></button>
+        <mat-menu #mobileMenu="matMenu">
             <span mat-menu-item><span id="green-point"></span> {{ currentNetwork | titlecase }}</span>
             <span mat-menu-item>{{ currentAccount?.address | titlecase }}</span>
             <span mat-menu-item>{{ currentAccount?.balance }} ETH</span>
