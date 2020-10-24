@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { Web3Service } from './services/web3.service';
 // import { IAccount } from './models/account';
 import { Observable } from 'rxjs';
+import { DomSanitizer } from '@angular/platform-browser';
+import { MatIconRegistry } from '@angular/material/icon';
 
 @Component({
   selector: 'app-root',
@@ -12,9 +14,14 @@ export class AppComponent {
   public isWeb3Ready$: Observable<boolean>;
 
 
-  constructor(private web3Service: Web3Service) {
+  constructor(private web3Service: Web3Service, private matIconRegistry: MatIconRegistry,
+    private domSanitizer: DomSanitizer) {
     // this.listenToIsWeb3Ready();
     this.isWeb3Ready$ = this.web3Service.isWeb3Initialized$;
+    this.matIconRegistry.addSvgIcon(
+      'metamask',
+      this.domSanitizer.bypassSecurityTrustResourceUrl('../assets/svg/metamask-fox.svg')
+    );
   }
 
   // private listenToIsWeb3Ready(): void {

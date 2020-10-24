@@ -49,7 +49,8 @@ export class DeliveryListComponent {
   public openDialog(develiveryHash: string) {
     this.web3Serice.getDelivery(develiveryHash).then(delivery => {
       this.dialog.open(DeliveryDetailsDialogComponent, {
-        data: delivery
+        data: delivery,
+        panelClass: 'dialog-container-delivery-details'
       });
     });
   }

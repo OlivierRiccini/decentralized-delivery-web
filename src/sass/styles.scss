@@ -1,7 +1,10 @@
 /* You can add global styles to this file, and also import other style files */
 @import 'src/sass/variables';
+@import url("https://fonts.googleapis.com/icon?family=Material+Icons");
 @import 'https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css';
 @import "https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v4.0.2/mapbox-gl-directions.css";
+
+@import 'src/sass/components/buttons';
 
 html, body { height: 100%; }
 body { 
@@ -9,7 +12,6 @@ body {
     font-family: Roboto,
     "Helvetica Neue", sans-serif;
     background: $extraLightOpacityBlue;
-    // overflow: hidden;
 }
     
 .mat-grid-tile .mat-figure {
@@ -43,20 +45,21 @@ body {
     }
 }
 
-mat-dialog-container {
-    transform: none !important;
-    max-height: 90vh !important;
-    overflow: auto !important;
+.dialog-container-delivery-details mat-dialog-container {
+    transform: none;
+    max-height: 90vh;
+    overflow: auto;
+    padding: 20px;
+}
+
+.dialog-container-link-wallet  mat-dialog-container {
+    padding: 20px;
+    overflow: hidden;
 }
 
 .mat-horizontal-stepper-header {
     pointer-events: none !important;
 }
-
-mat-dialog-container {
-    padding: 20px !important;
-}
-
 
 .mat-list-item-content {
     justify-content: space-between !important;

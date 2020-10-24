@@ -1,0 +1,11 @@
+@import 'src/sass/variables';
+
+.btn-metamask {
+    border: 2px solid $orange-metamask !important;
+    color: $orange-metamask;
+    transition: all .2s;
+    &:hover {
+        background-color: $orange-metamask-lighter;
+        color: #fff;
+    }
+}

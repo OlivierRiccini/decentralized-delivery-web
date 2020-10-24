@@ -1,0 +1,33 @@
+<div class="dialog-relative-wrapper">
+    <mat-tab-group (selectedTabChange)="onTabClick($event)">
+        <mat-tab *ngFor="let method of walletConnectionMethods" [label]="method.label">
+            <app-link-metamask *ngIf="method.enumValue === WalletConnectionMethod.MetaMask" [isMetaMaskInstalled]="isMetaMaskInstalled">
+            </app-link-metamask>
+            <p *ngIf="method.enumValue === WalletConnectionMethod.Other">
+                We are currently working on implementing different way to connect a wallet...
+            </p>
+        </mat-tab>
+    </mat-tab-group>
+    <div mat-dialog-actions>
+        <button 
+            *ngIf="selectedMethod === WalletConnectionMethod.MetaMask && isMetaMaskInstalled"
+            mat-button
+            class="btn-metamask"
+            (click)="onLinkWallet()"
+            >
+            Sign in MetaMask 
+            <mat-icon svgIcon="metamask"></mat-icon>
+        </button>
+        <a 
+            *ngIf="selectedMethod === WalletConnectionMethod.MetaMask && !isMetaMaskInstalled"
+            mat-button
+            class="btn-metamask"
+            href="https://metamask.io/download.html"
+            target="_blank"
+            >
+            Install MetaMask
+            <mat-icon svgIcon="metamask"></mat-icon>
+        </a>
+        <button mat-button mat-dialog-close>Close</button>
+    </div>
+</div>

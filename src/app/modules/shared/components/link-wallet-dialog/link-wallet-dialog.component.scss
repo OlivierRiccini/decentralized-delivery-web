@@ -1,0 +1,9 @@
+.dialog-relative-wrapper {
+    position: relative;
+    height: -webkit-fill-available;
+}
+
+.mat-dialog-actions {
+    position: absolute;
+    bottom: 0;
+}

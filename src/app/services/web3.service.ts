@@ -5,7 +5,8 @@ import { IAccount } from '../models/account';
 import * as moment from 'moment';
 import { IGeoJson } from '../models/geoJson';
 import { first } from 'rxjs/operators';
-import { features } from 'process';
+import { MatDialog } from '@angular/material/dialog';
+import { LinkWalletDialogComponent } from '../modules/shared/components/link-wallet-dialog/link-wallet-dialog.component';
 
 declare let require: any;
 const DELIVERY_MANAGER_ARTIFACTS = require('../../config/contracts/DeliveryManager.json');
@@ -30,7 +31,7 @@ export class Web3Service {
 
   private deliveryManagerContract: any;
 
-  constructor() {
+  constructor(public dialog: MatDialog) {
     this.account = new BehaviorSubject(null);
     this.account$ = this.account.asObservable();
     this.deliveryStream = new BehaviorSubject(null);
@@ -42,7 +43,7 @@ export class Web3Service {
     this.deliveryFeatures = new BehaviorSubject([]);
     this.deliveryFeatures$ = this.deliveryFeatures.asObservable();
     this.contractAddress = '0x278Bb1675c63A1922429EfE86a59773e0532454D';
-    console.log('Hmmmmm ', window.ethereum._state.isUnlocked);
+    console.log('Hmmmmm ', window.ethereum.isMetaMask);
     if (window.ethereum._state.isUnlocked) {
       this.linkWallet().then(() => console.log('Web3 was already unlocked!')).catch();
     }
@@ -143,6 +144,14 @@ export class Web3Service {
     return decodedUser;
   }
 
+  public openLinkWalletDialog(): void {
+    this.dialog.open(LinkWalletDialogComponent, {
+      width: '500px',
+      height: '50vh',
+      panelClass: 'dialog-container-link-wallet'
+    });
+  }
+
   public async linkWallet(): Promise<void> {
     try {
       await this.initWeb3();
@@ -155,6 +164,10 @@ export class Web3Service {
     } catch (err) {
       alert('ERROR ' + err);
     }
+  }
+
+  public isMetaMaskInstalled(): boolean {
+    return window.ethereum && window.ethereum.isMetaMask;
   }
 
   private async initWeb3() {

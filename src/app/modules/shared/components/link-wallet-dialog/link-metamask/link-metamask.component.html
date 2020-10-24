@@ -1,0 +1,13 @@
+<div class="metamask-wrapper">
+    <img class="metamask-fox" src="../../../../../../assets/svg/metamask-fox.svg" alt="metamask-fox">
+    <p *ngIf="isMetaMaskInstalled">
+        Nice you already have MetaMask installed! Please click the button down below to connect your wallet.
+    </p>
+    <p *ngIf="!isMetaMaskInstalled">
+        It seems you don't have MetaMask installed yet. <br>
+        Metamask is a crypto wallet & gateway to blockchain apps.
+        Please download and install it to access all the features we offer.
+        To do so, please click the button down below.
+    </p>
+</div>
+

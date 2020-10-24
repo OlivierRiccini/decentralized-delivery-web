@@ -18,11 +18,15 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatListModule } from '@angular/material/list';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatIconModule } from '@angular/material/icon';
 import { MapComponent } from './components/map/map.component';
 import { DeliveryListComponent } from './components/delivery-list/delivery-list.component';
 import { DeliveryDetailsDialogComponent } from './components/delivery-details-dialog/delivery-details-dialog.component';
 import { DeliveryStateIcon } from 'src/app/pipes/deliveryStateIcon.pipe';
 import { DeliveryState } from 'src/app/pipes/deliveryState.pipe';
+import { LinkWalletDialogComponent } from './components/link-wallet-dialog/link-wallet-dialog.component';
+import { LinkMetamaskComponent } from './components/link-wallet-dialog/link-metamask/link-metamask.component';
+
 
 @NgModule({
   declarations: [
@@ -30,7 +34,9 @@ import { DeliveryState } from 'src/app/pipes/deliveryState.pipe';
     DeliveryListComponent,
     DeliveryDetailsDialogComponent,
     DeliveryStateIcon,
-    DeliveryState
+    DeliveryState,
+    LinkWalletDialogComponent,
+    LinkMetamaskComponent
   ],
   imports: [
     CommonModule,
@@ -52,7 +58,8 @@ import { DeliveryState } from 'src/app/pipes/deliveryState.pipe';
     MatTabsModule,
     MatListModule,
     MatSnackBarModule,
-    MatMenuModule
+    MatMenuModule,
+    MatIconModule
   ],
   exports: [
     FormsModule,
@@ -78,7 +85,8 @@ import { DeliveryState } from 'src/app/pipes/deliveryState.pipe';
     DeliveryListComponent,
     DeliveryDetailsDialogComponent,
     DeliveryStateIcon,
-    DeliveryState
+    DeliveryState,
+    MatIconModule
   ],
   providers: [
     FormGroupDirective

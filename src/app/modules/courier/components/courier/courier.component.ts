@@ -18,7 +18,7 @@ export class CourierComponent implements OnInit {
   }
 
   public onLinkWallet(): void {
-    this.web3Service.linkWallet().then().catch();
+    this.web3Service.openLinkWalletDialog();
   }
 
 }
